@@ -3,7 +3,7 @@ This is hands-on lab for aws cdk, cdk support typescript,javascript,java,.net, p
 
 
 ## Set your environment
-  [Prerequisites](https://github.com/stevensu1977/aws-cdk-handson/blob/master/prerequisites.md?raw=true)
+  [Prerequisites](https://github.com/stevensu1977/aws-cdk-handson/blob/master/prerequisites.md)
   
   
 ## Lab 
