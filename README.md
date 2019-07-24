@@ -2,11 +2,11 @@
 This is hands-on lab for aws cdk, cdk support typescript,javascript,java,.net, python , this lab only cover python and typescript.
 
 
-##Set your environment
+## Set your environment
   [Prerequisites](https://github.com/stevensu1977/aws-cdk-handson/blob/master/prerequisites.md?raw=true)
   
   
-##Lab 
+## Lab 
 
  Lab01 create your first stack 
 
