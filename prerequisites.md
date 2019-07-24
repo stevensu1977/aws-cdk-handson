@@ -1,4 +1,4 @@
-#Prerequisties
+# Prerequisties
 
  * AWS Account and User
  * AWS CLI
@@ -6,12 +6,12 @@
  * IDE or editor
  * AWS CDK Toolkit
 
- ##AWS IAM
+ ## AWS IAM
  
    [Create IAM User for hands-on](https://cdkworkshop.com/15-prerequisites/200-account.html)
    
  
- ##AWS CLI
+ ## AWS CLI
  
     Windows: [MSI Installer](https://docs.aws.amazon.com/cli/latest/userguide/install-windows.html#install-msi-on-windows)
     
@@ -25,7 +25,7 @@
     
     ```
  
- ##Node.js
+ ## Node.js
     Install node.js (>=8.12.0)
     
     ```bash
@@ -33,13 +33,13 @@
     v12.4.0
     ```
     
- ##IDE or text editor
+ ## IDE or text editor
  
     VSCode
     VIM
     Sublime Text
     
- ##AWS CDK Toolkit
+ ## AWS CDK Toolkit
    
    Install CDK Toolkit (cdk command) used npm
    
@@ -50,7 +50,7 @@
    
    ```
  
- ##CDK Support language
+ ## CDK Support language
  
    TypeScript
    Python
