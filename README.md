@@ -2,56 +2,38 @@
 This is hands-on lab for aws cdk, cdk support typescript,javascript,java,.net, python , this lab only cover python and typescript.
 
 
-## Set your environment
+## Set your hands on environment
   [Prerequisites](https://github.com/stevensu1977/aws-cdk-handson/blob/master/prerequisites.md)
   
+  ```bash
+  #use lab from github
+  git clone https://github.com/stevensu1977/aws-cdk-handson.git  
+  cd aws-cdk-handson
+  virtualenv .
+  source bin/activate
+  
+  ```
+  
+## Useful commands
+
+ * `cdk ls`          list all stacks in the app
+ * `cdk synth`       emits the synthesized CloudFormation template
+ * `cdk deploy`      deploy this stack to your default AWS account/region
+ * `cdk diff`        compare deployed stack with current state
+ * `cdk docs`        open CDK documentation
+
+ 
   
 ## Lab 
 
- Lab01 create your first stack 
+ * [Lab01](https://github.com/stevensu1977/aws-cdk-handson/blob/master/Lab01/README.md)
 
- * init empty stack
+ * list/deploy/destroy stack
+   
+ * how to create s3 bucket 
   
-  ```bash
-  #linux or macOS
-  cdk init app --language python
-  source .env/bin/activate
-  pip install -r requirements.txt
-  
-  
-  #use region parameter 
-  cdk deploy --region ap-northeast-1
-  
-  cdk destroy --region ap-norheast-1
-  
-  ```
+ * create second s3 bucket for other region
  
- * add s3 bucket to stack
- 
- ```bash
- pip install aws-cdk.aws_s3
- 
- ``` 
- 
- * code comments
- 
- ```python
- #
- #get region, use region as bucket postfix name
- region=self.region
- #init CfnBucket
- s3.CfnBucket(self,id,
-                    bucket_name="stevensu-cdk-"+region,
-                    bucket_encryption={
-                         'serverSideEncryptionConfiguration':[
-                               {'serverSideEncryptionByDefault':
-                                 {'sseAlgorithm':'AES256'}
-                               }
-                             ]
-                         }
-                    )
- 
- ```
-  
+ Lab02
 
 
