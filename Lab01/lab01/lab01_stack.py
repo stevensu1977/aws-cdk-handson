@@ -12,13 +12,23 @@ class Lab01Stack(core.Stack):
         region=self.region
         #init CfnBucket
         s3.CfnBucket(self,id,
-                    bucket_name="stevensu-cdk-"+region,
+                    bucket_name="aws-cdk-handson-"+region,
                     bucket_encryption={
                          'serverSideEncryptionConfiguration':[
                                {'serverSideEncryptionByDefault':
                                  {'sseAlgorithm':'AES256'}
                                }
                              ]
-                         }
+                         },
+                         cors_configuration={
+                             'corsRules':[
+                                 {
+                                     'allowedHeaders':['*'],
+                                     'allowedMethods':['GET'],
+                                     'allowedOrigins':['*']
+                                 }
+                             ]
+                         },
+                         versioning_configuration={'status': 'Enabled'}
                     )
         # The code that defines your stack goes here
