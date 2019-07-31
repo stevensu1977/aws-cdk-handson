@@ -9,7 +9,7 @@ This is hands-on lab for aws cdk, cdk support typescript,javascript,java,.net, p
   #use lab from github
   git clone https://github.com/stevensu1977/aws-cdk-handson.git  
   cd aws-cdk-handson
-  virtualenv .
+  virtualenv .env
   source bin/activate
   
   ```
