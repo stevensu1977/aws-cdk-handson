@@ -1,5 +1,5 @@
 # Lab01
-Lab01 create your first stack 
+Lab01 use cdk create s3 bucket 
 
  * list/deploy/destroy stack
   
