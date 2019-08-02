@@ -12,7 +12,7 @@ class Lab01Stack(core.Stack):
         #get region, use region as bucket postfix name
         region=self.region
         #init CfnBucket
-        s3.CfnBucket(self,id,
+        bucket=s3.CfnBucket(self,id,
                     bucket_name="aws-cdk-handson-"+region,
                     bucket_encryption={
                          'serverSideEncryptionConfiguration':[
@@ -32,4 +32,5 @@ class Lab01Stack(core.Stack):
                          },
                          versioning_configuration={'status': 'Enabled'}
                     )
+        core.CfnOutput(self,"BucketArn",export_name="BucketArn",value=bucket.attr_arn)   
         # The code that defines your stack goes here
