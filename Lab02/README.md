@@ -1,7 +1,7 @@
 # Lab02
 Lab02 use cdk create ec2 instance with s config
 
-This is full ec2 config example, include vpc, security group , userdata, ENI,EIP
+This is full ec2 config example, include vpc, security group , userdata, ENI,EIP, assume role for ec2
 
  * list/deploy/destroy stack
   
