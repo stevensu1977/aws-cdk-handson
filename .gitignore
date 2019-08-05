@@ -1,0 +1,7 @@
+.Python
+.env/
+.vscode/
+**/**/__pycache__
+**/**/__init__.py
+**/**/*.egg-info
+**/cdk.out/
