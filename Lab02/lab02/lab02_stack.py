@@ -66,7 +66,7 @@ class Lab02Stack(core.Stack):
         )
           
         #read and base64 encode userdata file
-        data = open("httpd.sh", "rb").read()
+        data = open("../resource/httpd.sh", "rb").read()
         encodedBytes = base64.encodebytes(data)
         encodedStr = str(encodedBytes, "utf-8")
 
