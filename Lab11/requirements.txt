@@ -1,0 +1,8 @@
+-e .
+aws-cdk.aws-ec2
+aws-cdk.aws-s3
+aws-cdk.aws-rds
+aws-cdk.aws-dms
+aws-cdk.aws-kinesis
+aws-cdk.aws-kinesisanalytics
+aws-cdk.aws-kinesisfirehose
