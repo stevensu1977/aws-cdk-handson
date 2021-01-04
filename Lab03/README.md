@@ -1,8 +1,11 @@
 # Lab03
- Lab03 is AutoScalingGroup , Elastic Load Balancer example, you create web servers used CDK.
+准备环境
+
+
+##Lab03 is AutoScalingGroup , Elastic Load Balancer example, you create web servers used CDK.
 
  * deploy/destroy stack
-  
+
   ```bash
   
   cd Lab03
@@ -15,9 +18,9 @@
   cdk destroy   
   
   ```
- 
+
  * create  AutoScaling Group
- 
+
  ```python
     #create AutoScaling Group
     ami=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2) #get AMAZON Linux 2 AMI
@@ -33,10 +36,10 @@
             max_capacity=3,
         )
         
-  ```
- 
+ ```
+
  * create Elastic Load balancer
- 
+
  ```bash
     #create Elastic Load Balancer
     lab03_alb=elb.ApplicationLoadBalancer(self,"lab03_alb",vpc=lab03_vpc,internet_facing=True)
@@ -44,4 +47,3 @@
     alb_listener.add_targets('Target',port=80,targets=[asg])
  
  ```
- 

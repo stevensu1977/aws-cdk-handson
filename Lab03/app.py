@@ -6,6 +6,10 @@ from lab03.lab03_stack import Lab03Stack
 
 
 app = core.App()
-Lab03Stack(app, "lab03",env={"region":"ap-northeast-1"})
+
+region="cn-northwest-1"
+#region="us-east-1"
+Lab03Stack(app, "lab03-"+region,env={"region":region})
+
 
 app.synth()

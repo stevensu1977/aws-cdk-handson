@@ -1,0 +1,451 @@
+Resources:
+  Lab0327D217C2:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03
+    Metadata:
+      aws:cdk:path: lab03/Lab03/Resource
+  Lab03PublicSubnet1Subnet771372B8:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.0.0/18
+      VpcId:
+        Ref: Lab0327D217C2
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PublicSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/Subnet
+  Lab03PublicSubnet1RouteTable4BD302DF:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Lab0327D217C2
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PublicSubnet1
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/RouteTable
+  Lab03PublicSubnet1RouteTableAssociationFC9292B5:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: Lab03PublicSubnet1RouteTable4BD302DF
+      SubnetId:
+        Ref: Lab03PublicSubnet1Subnet771372B8
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/RouteTableAssociation
+  Lab03PublicSubnet1DefaultRouteCD1F5D80:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: Lab03PublicSubnet1RouteTable4BD302DF
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: Lab03IGW9544D237
+    DependsOn:
+      - Lab03VPCGWF4B218B0
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/DefaultRoute
+  Lab03PublicSubnet1EIP339066A8:
+    Type: AWS::EC2::EIP
+    Properties:
+      Domain: vpc
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/EIP
+  Lab03PublicSubnet1NATGateway6E1B2EE1:
+    Type: AWS::EC2::NatGateway
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - Lab03PublicSubnet1EIP339066A8
+          - AllocationId
+      SubnetId:
+        Ref: Lab03PublicSubnet1Subnet771372B8
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PublicSubnet1
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet1/NATGateway
+  Lab03PublicSubnet2Subnet812D30E6:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.64.0/18
+      VpcId:
+        Ref: Lab0327D217C2
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PublicSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Public
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet2/Subnet
+  Lab03PublicSubnet2RouteTable6B56E140:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Lab0327D217C2
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PublicSubnet2
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet2/RouteTable
+  Lab03PublicSubnet2RouteTableAssociationC8FAF2D4:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: Lab03PublicSubnet2RouteTable6B56E140
+      SubnetId:
+        Ref: Lab03PublicSubnet2Subnet812D30E6
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet2/RouteTableAssociation
+  Lab03PublicSubnet2DefaultRouteDA4EB291:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: Lab03PublicSubnet2RouteTable6B56E140
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: Lab03IGW9544D237
+    DependsOn:
+      - Lab03VPCGWF4B218B0
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PublicSubnet2/DefaultRoute
+  Lab03PrivateSubnet1Subnet0ADAF542:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.128.0/18
+      VpcId:
+        Ref: Lab0327D217C2
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PrivateSubnet1
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet1/Subnet
+  Lab03PrivateSubnet1RouteTable98ADC2FD:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Lab0327D217C2
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PrivateSubnet1
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet1/RouteTable
+  Lab03PrivateSubnet1RouteTableAssociationBAAACA3A:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: Lab03PrivateSubnet1RouteTable98ADC2FD
+      SubnetId:
+        Ref: Lab03PrivateSubnet1Subnet0ADAF542
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet1/RouteTableAssociation
+  Lab03PrivateSubnet1DefaultRoute21158C66:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: Lab03PrivateSubnet1RouteTable98ADC2FD
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: Lab03PublicSubnet1NATGateway6E1B2EE1
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet1/DefaultRoute
+  Lab03PrivateSubnet2Subnet5F5EAF02:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 10.0.192.0/18
+      VpcId:
+        Ref: Lab0327D217C2
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: false
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PrivateSubnet2
+        - Key: aws-cdk:subnet-name
+          Value: Private
+        - Key: aws-cdk:subnet-type
+          Value: Private
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet2/Subnet
+  Lab03PrivateSubnet2RouteTableAE91C3C2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: Lab0327D217C2
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03/PrivateSubnet2
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet2/RouteTable
+  Lab03PrivateSubnet2RouteTableAssociation2708870E:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: Lab03PrivateSubnet2RouteTableAE91C3C2
+      SubnetId:
+        Ref: Lab03PrivateSubnet2Subnet5F5EAF02
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet2/RouteTableAssociation
+  Lab03PrivateSubnet2DefaultRoute85B6198E:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: Lab03PrivateSubnet2RouteTableAE91C3C2
+      DestinationCidrBlock: 0.0.0.0/0
+      NatGatewayId:
+        Ref: Lab03PublicSubnet1NATGateway6E1B2EE1
+    Metadata:
+      aws:cdk:path: lab03/Lab03/PrivateSubnet2/DefaultRoute
+  Lab03IGW9544D237:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: lab03/Lab03
+    Metadata:
+      aws:cdk:path: lab03/Lab03/IGW
+  Lab03VPCGWF4B218B0:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: Lab0327D217C2
+      InternetGatewayId:
+        Ref: Lab03IGW9544D237
+    Metadata:
+      aws:cdk:path: lab03/Lab03/VPCGW
+  awscdkasgInstanceSecurityGroup8C09BE2B:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: lab03/aws-cdk-asg/InstanceSecurityGroup
+      SecurityGroupEgress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow all outbound traffic by default
+          IpProtocol: "-1"
+      Tags:
+        - Key: Name
+          Value: lab03/aws-cdk-asg
+      VpcId:
+        Ref: Lab0327D217C2
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/InstanceSecurityGroup/Resource
+  awscdkasgInstanceSecurityGroupfromlab03lab03albSecurityGroup7CB35419800EAA25A8:
+    Type: AWS::EC2::SecurityGroupIngress
+    Properties:
+      IpProtocol: tcp
+      Description: Load balancer to target
+      FromPort: 80
+      GroupId:
+        Fn::GetAtt:
+          - awscdkasgInstanceSecurityGroup8C09BE2B
+          - GroupId
+      SourceSecurityGroupId:
+        Fn::GetAtt:
+          - lab03albSecurityGroup1FC5AA63
+          - GroupId
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/InstanceSecurityGroup/from lab03lab03albSecurityGroup7CB35419:80
+  awscdkasgInstanceRole87CF42F6:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: ec2.amazonaws.com.cn
+        Version: "2012-10-17"
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/InstanceRole/Resource
+  awscdkasgInstanceProfileCF9DF4E9:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: awscdkasgInstanceRole87CF42F6
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/InstanceProfile
+  awscdkasgLaunchConfig495DB8DD:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: ami-00d0173a6c8a76d5f
+      InstanceType: t2.micro
+      IamInstanceProfile:
+        Ref: awscdkasgInstanceProfileCF9DF4E9
+      SecurityGroups:
+        - Fn::GetAtt:
+            - awscdkasgInstanceSecurityGroup8C09BE2B
+            - GroupId
+      UserData:
+        Fn::Base64: >
+          #!/bin/bash
+
+          #!/bin/sh
+
+
+          #install httpd
+
+          yum install httpd -y
+
+
+          #enable and start httpd
+
+          systemctl enable httpd
+
+          systemctl start httpd
+
+          echo "<html><head><title> Example Web Server</title></head>" >  /var/www/html/index.html
+
+          echo "<body>" >>  /var/www/html/index.html
+
+          echo "<div><center><h2>Welcome AWS $(hostname -f) </h2>" >>  /var/www/html/index.html
+
+          echo "<hr/>" >>  /var/www/html/index.html
+
+          curl http://169.254.169.254/latest/meta-data/instance-id >> /var/www/html/index.html
+
+          echo "</center></div></body></html>" >>  /var/www/html/index.html
+    DependsOn:
+      - awscdkasgInstanceRole87CF42F6
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/LaunchConfig
+  awscdkasgASGC19A0B05:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    Properties:
+      MaxSize: "3"
+      MinSize: "1"
+      DesiredCapacity: "2"
+      LaunchConfigurationName:
+        Ref: awscdkasgLaunchConfig495DB8DD
+      Tags:
+        - Key: Name
+          PropagateAtLaunch: true
+          Value: lab03/aws-cdk-asg
+      TargetGroupARNs:
+        - Ref: lab03alblab03alblistenerTargetGroup63826751
+      VPCZoneIdentifier:
+        - Ref: Lab03PrivateSubnet1Subnet0ADAF542
+        - Ref: Lab03PrivateSubnet2Subnet5F5EAF02
+    UpdatePolicy:
+      AutoScalingScheduledAction:
+        IgnoreUnmodifiedGroupSizeProperties: true
+    Metadata:
+      aws:cdk:path: lab03/aws-cdk-asg/ASG
+  lab03albAFFDF277:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Scheme: internet-facing
+      SecurityGroups:
+        - Fn::GetAtt:
+            - lab03albSecurityGroup1FC5AA63
+            - GroupId
+      Subnets:
+        - Ref: Lab03PublicSubnet1Subnet771372B8
+        - Ref: Lab03PublicSubnet2Subnet812D30E6
+      Type: application
+    DependsOn:
+      - Lab03PublicSubnet1DefaultRouteCD1F5D80
+      - Lab03PublicSubnet2DefaultRouteDA4EB291
+    Metadata:
+      aws:cdk:path: lab03/lab03_alb/Resource
+  lab03albSecurityGroup1FC5AA63:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Automatically created Security Group for ELB lab03lab03albFEF54ADE
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          Description: Allow from anyone on port 80
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+      VpcId:
+        Ref: Lab0327D217C2
+    Metadata:
+      aws:cdk:path: lab03/lab03_alb/SecurityGroup/Resource
+  lab03albSecurityGrouptolab03awscdkasgInstanceSecurityGroup026EC0EB807E925899:
+    Type: AWS::EC2::SecurityGroupEgress
+    Properties:
+      GroupId:
+        Fn::GetAtt:
+          - lab03albSecurityGroup1FC5AA63
+          - GroupId
+      IpProtocol: tcp
+      Description: Load balancer to target
+      DestinationSecurityGroupId:
+        Fn::GetAtt:
+          - awscdkasgInstanceSecurityGroup8C09BE2B
+          - GroupId
+      FromPort: 80
+      ToPort: 80
+    Metadata:
+      aws:cdk:path: lab03/lab03_alb/SecurityGroup/to lab03awscdkasgInstanceSecurityGroup026EC0EB:80
+  lab03alblab03alblistenerD6253EA7:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - TargetGroupArn:
+            Ref: lab03alblab03alblistenerTargetGroup63826751
+          Type: forward
+      LoadBalancerArn:
+        Ref: lab03albAFFDF277
+      Port: 80
+      Protocol: HTTP
+    Metadata:
+      aws:cdk:path: lab03/lab03_alb/lab03_alb_listener/Resource
+  lab03alblab03alblistenerTargetGroup63826751:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Port: 80
+      Protocol: HTTP
+      TargetType: instance
+      VpcId:
+        Ref: Lab0327D217C2
+    Metadata:
+      aws:cdk:path: lab03/lab03_alb/lab03_alb_listener/TargetGroup/Resource
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.6.1,@aws-cdk/assets=1.6.1,@aws-cdk/aws-autoscaling=1.6.1,@aws-cdk/aws-autoscaling-common=1.6.1,@aws-cdk/aws-certificatemanager=1.6.1,@aws-cdk/aws-cloudformation=1.6.1,@aws-cdk/aws-cloudwatch=1.6.1,@aws-cdk/aws-ec2=1.6.1,@aws-cdk/aws-elasticloadbalancing=1.6.1,@aws-cdk/aws-elasticloadbalancingv2=1.6.1,@aws-cdk/aws-events=1.6.1,@aws-cdk/aws-iam=1.6.1,@aws-cdk/aws-kms=1.6.1,@aws-cdk/aws-lambda=1.6.1,@aws-cdk/aws-logs=1.6.1,@aws-cdk/aws-route53=1.6.1,@aws-cdk/aws-s3=1.6.1,@aws-cdk/aws-s3-assets=1.6.1,@aws-cdk/aws-sns=1.6.1,@aws-cdk/aws-sqs=1.6.1,@aws-cdk/aws-ssm=1.6.1,@aws-cdk/core=1.6.1,@aws-cdk/cx-api=1.6.1,@aws-cdk/region-info=1.6.1,jsii-runtime=Python/3.7.4
+Outputs:
+  Lab03ALB:
+    Value:
+      Fn::GetAtt:
+        - lab03albAFFDF277
+        - DNSName
+    Export:
+      Name: Lab03ALB
+

@@ -1,0 +1,4 @@
+-e .
+aws-cdk.aws-ec2>=1.1.0
+aws-cdk.aws-autoscaling>=1.1.0
+aws-cdk.aws-elasticloadbalancing>=1.1.0

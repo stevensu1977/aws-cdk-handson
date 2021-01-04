@@ -1,0 +1,28 @@
+{
+  "vpc-provider:account=596030579944:filter.tag:Name=default-vpc:region=ap-northeast-1": {
+    "vpcId": "vpc-27e9cb40",
+    "availabilityZones": [
+      "ap-northeast-1a",
+      "ap-northeast-1c",
+      "ap-northeast-1d"
+    ],
+    "publicSubnetIds": [
+      "subnet-5abf5012",
+      "subnet-541f460f",
+      "subnet-2cb94f07"
+    ],
+    "publicSubnetNames": [
+      "Public"
+    ],
+    "publicSubnetRouteTableIds": [
+      "rtb-b97dc6df",
+      "rtb-b97dc6df",
+      "rtb-b97dc6df"
+    ]
+  },
+  "availability-zones:account=596030579944:region=ap-northeast-1": [
+    "ap-northeast-1a",
+    "ap-northeast-1c",
+    "ap-northeast-1d"
+  ]
+}
