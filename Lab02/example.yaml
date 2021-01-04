@@ -1,0 +1,472 @@
+Resources:
+  ec2role0BB2D6E9:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service:
+                Fn::Join:
+                  - ""
+                  - - ec2.
+                    - Ref: AWS::URLSuffix
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/AmazonS3ReadOnlyAccess
+    Metadata:
+      aws:cdk:path: lab02/ec2role/Resource
+  ec2Profile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - Ref: ec2role0BB2D6E9
+      InstanceProfileName: aws-cdk-handson-ec2Profile
+    Metadata:
+      aws:cdk:path: lab02/ec2Profile
+  awscdkhandsonvpc8AC2C776:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 172.30.0.0/16
+      EnableDnsHostnames: true
+      EnableDnsSupport: true
+      InstanceTenancy: default
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/Resource
+  awscdkhandsonvpcsubnet1Subnet1Subnet0FE7BAC5:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.0.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: subnet-1-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1/Subnet
+  awscdkhandsonvpcsubnet1Subnet1RouteTable2D11382F:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1/RouteTable
+  awscdkhandsonvpcsubnet1Subnet1RouteTableAssociation600D6F48:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet1Subnet1RouteTable2D11382F
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet1Subnet1Subnet0FE7BAC5
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1/RouteTableAssociation
+  awscdkhandsonvpcsubnet1Subnet1DefaultRoute749F2F4C:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet1Subnet1RouteTable2D11382F
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet1/DefaultRoute
+  awscdkhandsonvpcsubnet1Subnet2SubnetF6482B4C:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.1.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: subnet-1-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2/Subnet
+  awscdkhandsonvpcsubnet1Subnet2RouteTable58B47B6A:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2/RouteTable
+  awscdkhandsonvpcsubnet1Subnet2RouteTableAssociation7020692E:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet1Subnet2RouteTable58B47B6A
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet1Subnet2SubnetF6482B4C
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2/RouteTableAssociation
+  awscdkhandsonvpcsubnet1Subnet2DefaultRoute763E0AD0:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet1Subnet2RouteTable58B47B6A
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-1-Subnet2/DefaultRoute
+  awscdkhandsonvpcsubnet2Subnet1Subnet81F9CE7D:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.2.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: subnet-2-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1/Subnet
+  awscdkhandsonvpcsubnet2Subnet1RouteTable4FD731A9:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1/RouteTable
+  awscdkhandsonvpcsubnet2Subnet1RouteTableAssociation952F218B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet2Subnet1RouteTable4FD731A9
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet2Subnet1Subnet81F9CE7D
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1/RouteTableAssociation
+  awscdkhandsonvpcsubnet2Subnet1DefaultRoute8723B845:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet2Subnet1RouteTable4FD731A9
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet1/DefaultRoute
+  awscdkhandsonvpcsubnet2Subnet2Subnet803E1820:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.3.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: subnet-2-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2/Subnet
+  awscdkhandsonvpcsubnet2Subnet2RouteTableEDD6FDB6:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2/RouteTable
+  awscdkhandsonvpcsubnet2Subnet2RouteTableAssociation21498DC4:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet2Subnet2RouteTableEDD6FDB6
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet2Subnet2Subnet803E1820
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2/RouteTableAssociation
+  awscdkhandsonvpcsubnet2Subnet2DefaultRouteF79FCE89:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet2Subnet2RouteTableEDD6FDB6
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-2-Subnet2/DefaultRoute
+  awscdkhandsonvpcsubnet3Subnet1Subnet9C3DFDC8:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.4.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 0
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1
+        - Key: aws-cdk:subnet-name
+          Value: subnet-3-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1/Subnet
+  awscdkhandsonvpcsubnet3Subnet1RouteTableA902AD36:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1/RouteTable
+  awscdkhandsonvpcsubnet3Subnet1RouteTableAssociationB1C59D3B:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet3Subnet1RouteTableA902AD36
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet3Subnet1Subnet9C3DFDC8
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1/RouteTableAssociation
+  awscdkhandsonvpcsubnet3Subnet1DefaultRoute283918F9:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet3Subnet1RouteTableA902AD36
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet1/DefaultRoute
+  awscdkhandsonvpcsubnet3Subnet2Subnet568A8C79:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: 172.30.5.0/24
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      AvailabilityZone:
+        Fn::Select:
+          - 1
+          - Fn::GetAZs: ""
+      MapPublicIpOnLaunch: true
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2
+        - Key: aws-cdk:subnet-name
+          Value: subnet-3-
+        - Key: aws-cdk:subnet-type
+          Value: Public
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2/Subnet
+  awscdkhandsonvpcsubnet3Subnet2RouteTable41208790:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2/RouteTable
+  awscdkhandsonvpcsubnet3Subnet2RouteTableAssociation3D272527:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet3Subnet2RouteTable41208790
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet3Subnet2Subnet568A8C79
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2/RouteTableAssociation
+  awscdkhandsonvpcsubnet3Subnet2DefaultRoute1A6E1053:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId:
+        Ref: awscdkhandsonvpcsubnet3Subnet2RouteTable41208790
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    DependsOn:
+      - awscdkhandsonvpcVPCGW4283AE48
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/subnet-3-Subnet2/DefaultRoute
+  awscdkhandsonvpcIGW4ECBA1B9:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: lab02/aws-cdk-handson-vpc
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/IGW
+  awscdkhandsonvpcVPCGW4283AE48:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+      InternetGatewayId:
+        Ref: awscdkhandsonvpcIGW4ECBA1B9
+    Metadata:
+      aws:cdk:path: lab02/aws-cdk-handson-vpc/VPCGW
+  ec2securitygroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: this is aws-cdk-handson workshop
+      GroupName: ec2securitygroup
+      SecurityGroupIngress:
+        - CidrIp: 0.0.0.0/0
+          FromPort: 80
+          IpProtocol: tcp
+          ToPort: 80
+        - CidrIp: 0.0.0.0/0
+          FromPort: 22
+          IpProtocol: tcp
+          ToPort: 22
+      VpcId:
+        Ref: awscdkhandsonvpc8AC2C776
+    Metadata:
+      aws:cdk:path: lab02/ec2securitygroup
+  eni1:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId:
+        Ref: awscdkhandsonvpcsubnet1Subnet1Subnet0FE7BAC5
+      GroupSet:
+        - Fn::GetAtt:
+            - ec2securitygroup
+            - GroupId
+    Metadata:
+      aws:cdk:path: lab02/eni-1
+  ec2httpd1:
+    Type: AWS::EC2::Instance
+    Properties:
+      IamInstanceProfile:
+        Ref: ec2Profile
+      ImageId:
+        Ref: SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter
+      InstanceType: t2.micro
+      KeyName: wsu-ap-northeast-1
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          NetworkInterfaceId:
+            Ref: eni1
+      Tags:
+        - Key: Name
+          Value: aws-cdk-handson-ec2
+      UserData: >
+        IyEvYmluL3NoCgojaW5zdGFsbCBodHRwZAp5dW0gaW5zdGFsbCBodHRwZCAteQoKI2VuYWJsZSBh
+
+        bmQgc3RhcnQgaHR0cGQKc3lzdGVtY3RsIGVuYWJsZSBodHRwZApzeXN0ZW1jdGwgc3RhcnQgaHR0
+
+        cGQKZWNobyAiPGh0bWw+PGhlYWQ+PHRpdGxlPiBFeGFtcGxlIFdlYiBTZXJ2ZXI8L3RpdGxlPjwv
+
+        aGVhZD4iID4gIC92YXIvd3d3L2h0bWwvaW5kZXguaHRtbAplY2hvICI8Ym9keT4iID4+ICAvdmFy
+
+        L3d3dy9odG1sL2luZGV4Lmh0bWwKZWNobyAiPGRpdj48Y2VudGVyPjxoMj5XZWxjb21lIEFXUyAk
+
+        KGhvc3RuYW1lIC1mKSA8L2gyPiIgPj4gIC92YXIvd3d3L2h0bWwvaW5kZXguaHRtbAplY2hvICI8
+
+        aHIvPiIgPj4gIC92YXIvd3d3L2h0bWwvaW5kZXguaHRtbApjdXJsIGh0dHA6Ly8xNjkuMjU0LjE2
+
+        OS4yNTQvbGF0ZXN0L21ldGEtZGF0YS9pbnN0YW5jZS1pZCA+PiAvdmFyL3d3dy9odG1sL2luZGV4
+
+        Lmh0bWwKZWNobyAiPC9jZW50ZXI+PC9kaXY+PC9ib2R5PjwvaHRtbD4iID4+ICAvdmFyL3d3dy9o
+
+        dG1sL2luZGV4Lmh0bWwK
+    Metadata:
+      aws:cdk:path: lab02/ec2-httpd-1
+  eip1:
+    Type: AWS::EC2::EIP
+    Metadata:
+      aws:cdk:path: lab02/eip-1
+  eipassi1:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - eip1
+          - AllocationId
+      NetworkInterfaceId:
+        Ref: eni1
+    Metadata:
+      aws:cdk:path: lab02/eip-ass-i1
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.7.0,@aws-cdk/aws-cloudwatch=1.6.1,@aws-cdk/aws-ec2=1.6.1,@aws-cdk/aws-iam=1.6.1,@aws-cdk/aws-ssm=1.6.1,@aws-cdk/core=1.6.1,@aws-cdk/cx-api=1.6.1,@aws-cdk/region-info=1.6.1,jsii-runtime=Python/3.7.4
+Parameters:
+  SsmParameterValueawsserviceamiamazonlinuxlatestamzn2amihvmx8664gp2C96584B6F00A464EAD1953AFF4B05118Parameter:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+Outputs:
+  PublicIP:
+    Value:
+      Fn::GetAtt:
+        - ec2httpd1
+        - PublicIp
+    Export:
+      Name: PublicIP
+  PublicDNSName:
+    Value:
+      Fn::GetAtt:
+        - ec2httpd1
+        - PublicDnsName
+    Export:
+      Name: PublicDNSName
+

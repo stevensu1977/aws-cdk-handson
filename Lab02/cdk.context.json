@@ -1,0 +1,54 @@
+{
+  "vpc-provider:account=596030579944:filter.tag:Name=default-vpc:region=ap-northeast-1": {
+    "vpcId": "vpc-27e9cb40",
+    "availabilityZones": [
+      "ap-northeast-1a",
+      "ap-northeast-1c",
+      "ap-northeast-1d"
+    ],
+    "publicSubnetIds": [
+      "subnet-5abf5012",
+      "subnet-541f460f",
+      "subnet-2cb94f07"
+    ],
+    "publicSubnetNames": [
+      "Public"
+    ]
+  },
+  "availability-zones:account=596030579944:region=ap-northeast-1": [
+    "ap-northeast-1a",
+    "ap-northeast-1c",
+    "ap-northeast-1d"
+  ],
+  "vpc-provider:account=188642756190:filter.tag:Name=default:region=cn-northwest-1:returnAsymmetricSubnets=true": {
+    "vpcId": "vpc-d09e23b9",
+    "vpcCidrBlock": "172.31.0.0/16",
+    "availabilityZones": [],
+    "subnetGroups": [
+      {
+        "name": "Public",
+        "type": "Public",
+        "subnets": [
+          {
+            "subnetId": "subnet-8455e2ed",
+            "cidr": "172.31.0.0/20",
+            "availabilityZone": "cn-northwest-1a",
+            "routeTableId": "rtb-1ca12575"
+          },
+          {
+            "subnetId": "subnet-0591597e",
+            "cidr": "172.31.16.0/20",
+            "availabilityZone": "cn-northwest-1b",
+            "routeTableId": "rtb-1ca12575"
+          },
+          {
+            "subnetId": "subnet-258abf6f",
+            "cidr": "172.31.32.0/20",
+            "availabilityZone": "cn-northwest-1c",
+            "routeTableId": "rtb-1ca12575"
+          }
+        ]
+      }
+    ]
+  }
+}

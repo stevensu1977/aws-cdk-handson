@@ -1,21 +1,26 @@
 # Lab02
- Lab02 is ec2 instance example, include vpc, security group , userdata, ENI,EIP, assume role for ec2
+ Lab02 使用CDK创建一个自动安装apache/httpd的EC2实例(自定义VPC、 安全组、 userdata, ENI、EIP、 设置角色)
 
- * list/deploy/destroy stack
+ * deploy/destroy stack
   
   ```bash
   
   cd Lab02
   pip install -r requirements.txt
   
-  #deploy stack 
+  #部署ec2实例,通过outputs里面的信息可以访问apache web server 
   cdk deploy 
-  #destory your stack 
+
+  Outputs:
+  lab02.PublicDNSName = <ec2>.<region>.compute.amazonaws.com
+  lab02.PublicIP = <ip地址>
+ 
+ #清除ec2实例 
   cdk destroy   
   
   ```
  
- * create vpc
+ * 创建VPC
  
  ```python
  vpc = ec2.Vpc(self,id="aws-cdk-handson-vpc",cidr="172.30.0.0/16",nat_gateways=0,
@@ -26,18 +31,14 @@
             ]) 
  ```
  
- * create new Security Group
+ * 创建安全组
  
  ```bash
  sg = ec2.CfnSecurityGroup(....
  
- 
- #deploy second s3 bucket 
- cdk deploy lab01-us
- 
  ```
  
- * create Elastic Network Interface
+ * 创建Elastic Network Interface
  
  ```python
  
@@ -48,7 +49,7 @@
         )
  ```
 
- * read and base64 encode userdata file 
+ * 读取/加载 userdata 自定义启动脚本 
  
  ```python
  #httpd.sh install httpd as service
@@ -63,9 +64,11 @@
  #create ec2 instances
  instance = ec2.CfnInstance(....
  
+  key_name="wsu-ap-northeast-1",#这个是keypair的名字非常重要,请更换你设置的keypair name
+
  ```
  
- * associate EIP with the instance
+ * 为ec2实例分配固定EIP
 
  ```python
  eip = ec2.CfnEIP(self, "eip-" + str(1))

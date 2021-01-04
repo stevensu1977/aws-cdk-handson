@@ -6,13 +6,14 @@ from aws_cdk import (
 )
 
 class Lab02Stack(core.Stack):
-    def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, id: str,custom:dict, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
-        
+        region = self.region
+
         #create S3 access role for ec2 
         ec2Role = iam.Role(
             self, 
-            "ec2role",
+            "aws-cdk-handson-lab02-ec2role",
             assumed_by=iam.ServicePrincipal("ec2.amazonaws.com"),
             managed_policies=[
                 iam.ManagedPolicy.from_aws_managed_policy_name("AmazonS3ReadOnlyAccess")
@@ -21,26 +22,36 @@ class Lab02Stack(core.Stack):
 
         instanceProfile = iam.CfnInstanceProfile(
             self,
-            "ec2Profile",
+            "aws-cdk-handson-lab02-ec2Profile",
             roles=[ec2Role.role_name],
-            instance_profile_name="aws-cdk-handson-ec2Profile",
+            instance_profile_name="aws-cdk-handson-lab02-ec2Profile",
 
         )
 
         #create new VPC for lab02
-        vpc= ec2.Vpc(self,id="aws-cdk-handson-vpc",cidr="172.30.0.0/16",nat_gateways=0,
+        #vpc = ec2.Vpc.from_lookup(self, "aws-cdk-handson-lab02-vpc",vpc_name="default") #使用默认的vpc
+
+        #创建新的vpc
+        vpc= ec2.Vpc(self,id="aws-cdk-handson-lab02-vpc",cidr="172.30.0.0/16",nat_gateways=0,
         subnet_configuration=[ 
              { "cidrMask": 24,"name": "subnet-1-", "subnetType": ec2.SubnetType.PUBLIC },
              { "cidrMask": 24,"name": "subnet-2-", "subnetType": ec2.SubnetType.PUBLIC },
              { "cidrMask": 24,"name": "subnet-3-", "subnetType": ec2.SubnetType.PUBLIC }, 
             ])
+
+        
+        
                 
-        #create new Security Group
+        
+        #使用已有的安全组
+        #sg=ec2.SecurityGroup.from_security_group_id(self,"nodeSG",security_group_id='sg-0dd53aaa5c9eb8324')
+
+        #创建新的安全组
         sg = ec2.CfnSecurityGroup(
             self,
-            "ec2securitygroup",
+            "aws-cdk-handson-lab02-ec2securitygroup",
             group_description="this is aws-cdk-handson workshop",
-            group_name="ec2securitygroup",
+            group_name="aws-cdk-handson-lab02-ec2securitygroup",
             security_group_ingress=[
                 {
                     "ipProtocol": "tcp",
@@ -54,16 +65,18 @@ class Lab02Stack(core.Stack):
                     "toPort": 22,
                     "cidrIp": "0.0.0.0/0",
                 },
+                {
+                    "ipProtocol": "tcp",
+                    "fromPort": 8080,
+                    "toPort": 8080,
+                    "cidrIp": "0.0.0.0/0",
+                },
             ],
             vpc_id=vpc.vpc_id
         )
 
-        #create Elastic Network Interface
-        eni0 = ec2.CfnNetworkInterface(
-            self, "eni-" + str(1), subnet_id=vpc.public_subnets[0].subnet_id,
-             #group_set=["sg-08cddeaeec7392eb2"]
-             group_set=[sg.attr_group_id]
-        )
+
+        
           
         #read and base64 encode userdata file
         data = open("../resource/httpd.sh", "rb").read()
@@ -72,31 +85,42 @@ class Lab02Stack(core.Stack):
 
         #create ec2 instances
         ami=ec2.AmazonLinuxImage(generation=ec2.AmazonLinuxGeneration.AMAZON_LINUX_2)
-        instance = ec2.CfnInstance(
-            self,
-            "ec2-httpd-" + str(1),
-            image_id=ami.get_image(self).image_id, #use Amazon Linux 2 AMI 
-            instance_type="t2.micro",
-            key_name="wsu-ap-northeast-1",
-            network_interfaces=[
-                {
-                    "deviceIndex": "0", 
-                    "networkInterfaceId": eni0.ref
-                }
-            
-            ],
-            tags=[core.CfnTag(key="Name", value="aws-cdk-handson-ec2")],
-            iam_instance_profile=instanceProfile.ref,
-            user_data=encodedStr
-           
-        )
-           
-        #associate EIP with the instance
-        eip = ec2.CfnEIP(self, "eip-" + str(1))
-        ec2.CfnEIPAssociation(self, "eip-ass-i" + str(1),
-                                 allocation_id=eip.attr_allocation_id,
-                                 network_interface_id=eni0.ref)
+
+        #创建2台EC2
+        ec2Count = 2
+
         
-        #Export PublicIP and PublicDNSName
-        core.CfnOutput(self,"PublicIP",export_name="PublicIP",value=instance.attr_public_ip)
-        core.CfnOutput(self,"PublicDNSName",export_name="PublicDNSName",value=instance.attr_public_dns_name)
+        
+        for i in range(ec2Count):
+            
+            eni0=ec2.CfnNetworkInterface(
+            self, "eni-" + str(i), subnet_id=vpc.public_subnets[0].subnet_id,
+            group_set=[sg.attr_group_id]
+            )
+            #group_set=[sg.security_group_id]
+            instance = ec2.CfnInstance(
+            self,
+            "ec2-httpd-" + str(i),
+            image_id=ami.get_image(self).image_id, #use Amazon Linux 2 AMI 
+            instance_type="t3.micro",
+            key_name="wsu-cn-northwest-1",#这个是keypair的名字非常重要
+            tags=[core.CfnTag(key="Name", value="aws-cdk-lab02-ec2-"+str(i))], #加上标签
+            iam_instance_profile=instanceProfile.ref,
+            user_data=encodedStr,
+            network_interfaces=[{
+                    'deviceIndex': '0',
+                    'networkInterfaceId': eni0.ref,
+            }])
+
+            core.CfnOutput(self,"PublicIP-"+str(i),export_name="PublicIP-"+str(i),value=instance.attr_public_ip)
+            core.CfnOutput(self,"PublicDNSName-"+str(i),export_name="PublicDNSName-"+str(i),value=instance.attr_public_dns_name)
+            
+
+        
+
+        
+
+       
+
+       
+       
