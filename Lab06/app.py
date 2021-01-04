@@ -6,7 +6,7 @@ from lab06.eks_worker_nodes_stack import EksWorkerNodesStack
 
 
 app = core.App()
-env = core.Environment(account='596030579944', region='us-east-1')
+env = core.Environment(account='111111111111', region='us-east-1')
 EksWorkerNodesStack(app, "eks-worker-nodes", env=env)
 
 app.synth()

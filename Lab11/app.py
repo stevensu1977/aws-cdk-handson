@@ -7,7 +7,7 @@ from lab11.lab11_stack import Lab11Stack
 
 
 app = core.App()
-Lab11Stack(app, "lab11", env={"account":"596030579944","region":"us-east-1"})
+Lab11Stack(app, "lab11", env={"account":"111111111111","region":"us-east-1"})
 
 app.synth()
 
