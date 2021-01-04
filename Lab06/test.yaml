@@ -1,0 +1,258 @@
+Resources:
+  kopsNodeProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Roles:
+        - eksworkshop-admin
+      InstanceProfileName: eks-cluster-workerNodeProfile
+    Metadata:
+      aws:cdk:path: eks-worker-nodes/kopsNodeProfile
+  eni0:
+    Type: AWS::EC2::NetworkInterface
+    Properties:
+      SubnetId: subnet-040455b57b16a4cc9
+      GroupSet:
+        - sg-0461d7bdfb942d0ef
+        - sg-0b3ae225b27e04679
+    Metadata:
+      aws:cdk:path: eks-worker-nodes/eni-0
+  kopsnode0:
+    Type: AWS::EC2::Instance
+    Properties:
+      BlockDeviceMappings:
+        - DeviceName: /dev/xvda
+          Ebs:
+            DeleteOnTermination: true
+            Encrypted: false
+            VolumeSize: 40
+            VolumeType: gp2
+        - DeviceName: /dev/sdb
+          Ebs:
+            DeleteOnTermination: true
+            Encrypted: false
+            VolumeSize: 100
+            VolumeType: gp2
+        - DeviceName: /dev/sdc
+          Ebs:
+            DeleteOnTermination: true
+            Encrypted: false
+            VolumeSize: 200
+            VolumeType: gp2
+      IamInstanceProfile:
+        Ref: kopsNodeProfile
+      ImageId: ami-0392bafc801b7520f
+      InstanceType: t2.medium
+      KeyName: wsu-us-east-1
+      NetworkInterfaces:
+        - DeviceIndex: "0"
+          NetworkInterfaceId:
+            Ref: eni0
+      Tags:
+        - Key: KubernetesCluster
+          Value: eks-asgfleet-01
+        - Key: Name
+          Value: test-01
+        - Key: k8s.io/role/node
+          Value: "1"
+        - Key: CDK/manual
+          Value: singlenode
+      UserData: >
+        IyEvYmluL2Jhc2gKIyBDb3B5cmlnaHQgMjAxNiBUaGUgS3ViZXJuZXRlcyBBdXRob3JzIEFsbCBy
+
+        aWdodHMgcmVzZXJ2ZWQuCiMKIyBMaWNlbnNlZCB1bmRlciB0aGUgQXBhY2hlIExpY2Vuc2UsIFZl
+
+        cnNpb24gMi4wICh0aGUgIkxpY2Vuc2UiKTsKIyB5b3UgbWF5IG5vdCB1c2UgdGhpcyBmaWxlIGV4
+
+        Y2VwdCBpbiBjb21wbGlhbmNlIHdpdGggdGhlIExpY2Vuc2UuCiMgWW91IG1heSBvYnRhaW4gYSBj
+
+        b3B5IG9mIHRoZSBMaWNlbnNlIGF0CiMKIyAgICAgaHR0cDovL3d3dy5hcGFjaGUub3JnL2xpY2Vu
+
+        c2VzL0xJQ0VOU0UtMi4wCiMKIyBVbmxlc3MgcmVxdWlyZWQgYnkgYXBwbGljYWJsZSBsYXcgb3Ig
+
+        YWdyZWVkIHRvIGluIHdyaXRpbmcsIHNvZnR3YXJlCiMgZGlzdHJpYnV0ZWQgdW5kZXIgdGhlIExp
+
+        Y2Vuc2UgaXMgZGlzdHJpYnV0ZWQgb24gYW4gIkFTIElTIiBCQVNJUywKIyBXSVRIT1VUIFdBUlJB
+
+        TlRJRVMgT1IgQ09ORElUSU9OUyBPRiBBTlkgS0lORCwgZWl0aGVyIGV4cHJlc3Mgb3IgaW1wbGll
+
+        ZC4KIyBTZWUgdGhlIExpY2Vuc2UgZm9yIHRoZSBzcGVjaWZpYyBsYW5ndWFnZSBnb3Zlcm5pbmcg
+
+        cGVybWlzc2lvbnMgYW5kCiMgbGltaXRhdGlvbnMgdW5kZXIgdGhlIExpY2Vuc2UuCgojIS9iaW4v
+
+        YmFzaAogICAgc2V0IC14CiAgICBzZXQgLWUKICAgIAogICAgZnVuY3Rpb24gbW91bnRfZG9ja2Vy
+
+        KCl7CiAgICAgICAgaWYgc3VkbyBmZGlzayAtbCB8IGdyZXAgLXEgL2Rldi9udm1lMW4xIDsgdGhl
+
+        bgogICAgICAgICAgICBsb2NhbCBERVZJQ0U9L2Rldi9udm1lMW4xCiAgICAgICAgZWxpZiBzdWRv
+
+        IGZkaXNrIC1sIHwgZ3JlcCAtcSAvZGV2L3h2ZGIgOyB0aGVuCiAgICAgICAgICAgIGxvY2FsIERF
+
+        VklDRT0vZGV2L3h2ZGIKICAgICAgICBlbHNlCiAgICAgICAgICAgIGVjaG8gIm1vdW50IGRhdGEg
+
+        ZmFpbGVkIiB8IHRlZSAvdG1wL3VzZXJkYXRhLmVycgogICAgICAgICAgICBleGl0IDEKICAgICAg
+
+        ICBmaQogICAgICAgIHN1ZG8gbWtmcy54ZnMgLW4gZnR5cGU9MSAke0RFVklDRX0KICAgICAgICBz
+
+        dWRvIHN5c3RlbWN0bCBzdG9wIGRvY2tlciB8fCB0cnVlCiAgICAgICAgc3VkbyBtdiAvdmFyL2xp
+
+        Yi9kb2NrZXIgIC92YXIvbGliL2RvY2tlci5vbGQKICAgICAgICBzdWRvIG1rZGlyIC1wIC92YXIv
+
+        bGliL2RvY2tlcgogICAgCiAgICAgICAgRE9DS0VSX1ZPTFVNRV9VVUlEPSQoc3VkbyBibGtpZCAt
+
+        byB2YWx1ZSAke0RFVklDRX0gfCBoZWFkIC1uIDEpCiAgICAgICAgRE9DS0VSX1ZPTFVNRV9GUz0k
+
+        KHN1ZG8gYmxraWQgLW8gdmFsdWUgJHtERVZJQ0V9IHwgdGFpbCAtbiAxKQogICAgICAgIHN1ZG8g
+
+        Z3JlcCAtcSAke0RPQ0tFUl9WT0xVTUVfVVVJRH0gL2V0Yy9mc3RhYiB8fCBlY2hvICJVVUlEPSR7
+
+        RE9DS0VSX1ZPTFVNRV9VVUlEfSAgICAgL3Zhci9saWIvZG9ja2VyICAgICAgICAgICAke0RPQ0tF
+
+        Ul9WT0xVTUVfRlN9ICAgIGRlZmF1bHRzLG5vYXRpbWUgIDEgICAxIiB8IHN1ZG8gdGVlIC1hIC9l
+
+        dGMvZnN0YWIKICAgICAgICBzdWRvIG1vdW50IC1hCiAgICAKICAgICAgICBzdWRvIGJhc2ggLWMg
+
+        J2NwIC1yYSAvdmFyL2xpYi9kb2NrZXIub2xkLyogL3Zhci9saWIvZG9ja2VyJwogICAgICAgIHN1
+
+        ZG8gc3lzdGVtY3RsIHN0YXJ0IGRvY2tlciB8fCB0cnVlCiAgICB9CiAgICAKICAgIGZ1bmN0aW9u
+
+        IG1vdW50X2RhdGEoKXsKICAgICAgICBpZiBzdWRvIGZkaXNrIC1sIHwgZ3JlcCAtcSAvZGV2L252
+
+        bWUybjEgOyB0aGVuCiAgICAgICAgICAgIGxvY2FsIERFVklDRT0vZGV2L252bWUybjEKICAgICAg
+
+        ICBlbGlmIHN1ZG8gZmRpc2sgLWwgfCBncmVwIC1xIC9kZXYveHZkYyA7IHRoZW4KICAgICAgICAg
+
+        ICAgbG9jYWwgREVWSUNFPS9kZXYveHZkYwogICAgICAgIGVsc2UKICAgICAgICAgICAgZWNobyAi
+
+        bW91bnQgZGF0YSBmYWlsZWQiIHwgdGVlIC90bXAvdXNlcmRhdGEuZXJyCiAgICAgICAgICAgIGV4
+
+        aXQgMQogICAgICAgIGZpCiAgICAgICAgc3VkbyBta2ZzLnhmcyAtbiBmdHlwZT0xICR7REVWSUNF
+
+        fQogICAgICAgIHN1ZG8gbWtkaXIgLXAgL2RhdGEKICAgICAgICBEQVRBX1ZPTFVNRV9VVUlEPSQo
+
+        c3VkbyBibGtpZCAtbyB2YWx1ZSAke0RFVklDRX0gfCBoZWFkIC1uIDEpCiAgICAgICAgREFUQV9W
+
+        T0xVTUVfRlM9JChzdWRvIGJsa2lkIC1vIHZhbHVlICR7REVWSUNFfSB8IHRhaWwgLW4gMSkKICAg
+
+        ICAgICBzdWRvIGdyZXAgLXEgJHtEQVRBX1ZPTFVNRV9VVUlEfSAvZXRjL2ZzdGFiIHx8IGVjaG8g
+
+        IlVVSUQ9JHtEQVRBX1ZPTFVNRV9VVUlEfSAgICAgL2RhdGEgICAgICAgICAgICR7REFUQV9WT0xV
+
+        TUVfRlN9ICAgIGRlZmF1bHRzLG5vYXRpbWUgIDEgICAxIiB8IHN1ZG8gdGVlIC1hIC9ldGMvZnN0
+
+        YWIKICAgICAgICBzdWRvIG1vdW50IC1hCiAgICB9CiAgICAKCmZ1bmN0aW9uIHRyeS1kb3dubG9h
+
+        ZC1yZWxlYXNlKCkgewogICMgVE9ETyh6bWVybHlubik6IE5vdyB3ZSBSRUFMTFkgaGF2ZSBubyBl
+
+        eGN1c2Ugbm90IHRvIGRvIHRoZSByZWJvb3QKICAjIG9wdGltaXphdGlvbi4KCiAgbG9jYWwgLXIg
+
+        bm9kZXVwX3VybHM9KCAkKHNwbGl0LWNvbW1hcyAiJHtOT0RFVVBfVVJMfSIpICkKICBsb2NhbCAt
+
+        ciBub2RldXBfZmlsZW5hbWU9IiR7bm9kZXVwX3VybHNbMF0jIyovfSIKICBpZiBbWyAtbiAiJHtO
+
+        T0RFVVBfSEFTSDotfSIgXV07IHRoZW4KICAgIGxvY2FsIC1yIG5vZGV1cF9oYXNoPSIke05PREVV
+
+        UF9IQVNIfSIKICBlbHNlCiAgIyBUT0RPOiBSZW1vdmU/CiAgICBlY2hvICJEb3dubG9hZGluZyBz
+
+        aGExIChub3QgZm91bmQgaW4gZW52KSIKICAgIGRvd25sb2FkLW9yLWJ1c3QgIiIgIiR7bm9kZXVw
+
+        X3VybHNbQF0vJS8uc2hhMX0iCiAgICBsb2NhbCAtciBub2RldXBfaGFzaD0kKGNhdCAiJHtub2Rl
+
+        dXBfZmlsZW5hbWV9LnNoYTEiKQogIGZpCgogIGVjaG8gIkRvd25sb2FkaW5nIG5vZGV1cCAoJHtu
+
+        b2RldXBfdXJsc1tAXX0pIgogIGRvd25sb2FkLW9yLWJ1c3QgIiR7bm9kZXVwX2hhc2h9IiAiJHtu
+
+        b2RldXBfdXJsc1tAXX0iCgogIGNobW9kICt4IG5vZGV1cAp9CgpmdW5jdGlvbiBkb3dubG9hZC1y
+
+        ZWxlYXNlKCkgewogICMgSW4gY2FzZSBvZiBmYWlsdXJlIGNoZWNraW5nIGludGVncml0eSBvZiBy
+
+        ZWxlYXNlLCByZXRyeS4KICB1bnRpbCB0cnktZG93bmxvYWQtcmVsZWFzZTsgZG8KICAgIHNsZWVw
+
+        IDE1CiAgICBlY2hvICJDb3VsZG4ndCBkb3dubG9hZCByZWxlYXNlLiBSZXRyeWluZy4uLiIKICBk
+
+        b25lCgogIGVjaG8gIlJ1bm5pbmcgbm9kZXVwIgogICMgV2UgY2FuJ3QgcnVuIGluIHRoZSBmb3Jl
+
+        Z3JvdW5kIGJlY2F1c2Ugb2YgaHR0cHM6Ly9naXRodWIuY29tL2RvY2tlci9kb2NrZXIvaXNzdWVz
+
+        LzIzNzkzCiAgKCBjZCAke0lOU1RBTExfRElSfTsgLi9ub2RldXAgLS1pbnN0YWxsLXN5c3RlbWQt
+
+        dW5pdCAtLWNvbmY9JHtJTlNUQUxMX0RJUn0va3ViZV9lbnYueWFtbCAtLXY9OCAgKQp9CiAgICAK
+
+        bW91bnRfZG9ja2VyCm1vdW50X2RhdGEKICAgIAoKc3VkbyAvZXRjL2Vrcy9ib290c3RyYXAuc2gg
+
+        LS1hcGlzZXJ2ZXItZW5kcG9pbnQgJ2h0dHBzOi8vOTBERTk5M0I5NjU2MUMxMkRGNjNGRDQwRjI4
+
+        MUVDQzcuZ3I3LnVzLWVhc3QtMS5la3MuYW1hem9uYXdzLmNvbScgLS1iNjQtY2x1c3Rlci1jYSAn
+
+        TFMwdExTMUNSVWRKVGlCRFJWSlVTVVpKUTBGVVJTMHRMUzB0Q2sxSlNVTjVSRU5EUVdKRFowRjNT
+
+        VUpCWjBsQ1FVUkJUa0puYTNGb2EybEhPWGN3UWtGUmMwWkJSRUZXVFZKTmQwVlJXVVJXVVZGRVJY
+
+        ZHdjbVJYU213S1kyMDFiR1JIVm5wTlFqUllSRlJGTlUxVVNYaE9SRUY1VFhwSmVFNUdiMWhFVkVr
+
+        MVRWUkplRTFVUVhsTmVrbDRUa1p2ZDBaVVJWUk5Ra1ZIUVRGVlJRcEJlRTFMWVROV2FWcFlTblZh
+
+        V0ZKc1kzcERRMEZUU1hkRVVWbEtTMjlhU1doMlkwNUJVVVZDUWxGQlJHZG5SVkJCUkVORFFWRnZR
+
+        MmRuUlVKQlNsRjFDamhGUkROSU1GQmpiMU5YTTA0MFRFMHhNM0ZyYmtkQ2FGaEpWVlJEUkVjM1RU
+
+        RnlNRkZDWW1rMVdVMU5WSFp2VkRjNEt5OVNjSEp2ZUdobmFscGxSak1LVUZjMlMzcFljbnBpYjJS
+
+        YWFWRXZlV2h0VFRSU1ptbFdjRFJqTTFORVR6TnNaV1pRYW05YVlWSkpZa1JDZEc1SE9VaFRWWEEw
+
+        Y1ZwMU5FeFlVMll5ZFFwRFZWaExPRTVrTUVOa2VXZE9iSEUyZVhWNk56Tm5kSEJvWldwMFYwd3hW
+
+        RXczUTJGdU4xZHZPRkZMTkVWbE5uSnZRa1Z0TUd0c01HTlpORFo0UlU1cENqZzBNRzVQVkdwdk9G
+
+        SkpibFJPWTBkeWFYWktPR2gwVVd4M09YSlpZbm8wTDNsNlFVNTNVRkp0VVdGMWNrVlNhelZDU0dS
+
+        bllWVTBjM2N4Ykd4a1lqUUtjVFZKYldKblVXOXphbTByTUU4eVYwTXhSVFZqSzI1QlRrZGpWMDh4
+
+        UkdKc2RYbDZiblp1ZW5WeE1raElLMnBuTlVGRFRtNW1NamxpUjNJMmRXbHRUZ3BvTnpOa1pGcFJa
+
+        WEJXYzJoV2JIcGlSWGxOUTBGM1JVRkJZVTFxVFVORmQwUm5XVVJXVWpCUVFWRklMMEpCVVVSQlow
+
+        dHJUVUU0UjBFeFZXUkZkMFZDQ2k5M1VVWk5RVTFDUVdZNGQwUlJXVXBMYjFwSmFIWmpUa0ZSUlV4
+
+        Q1VVRkVaMmRGUWtGS1VFbGpOWFpVV2xKa2JqRlNiM1pzYWxwT0syZFpRWGhzVG1jS2IxVklPVkpT
+
+        VG1OaVNtUktialIxUWxoUk5YUkNSMUlyUVd4S2F6bEtiR2RIVkVwd1JGTm5OWEpyVm1OYVIyMHdL
+
+        MkpZYkROaGMzcGpSaXQ2Y0Zka1JncGphM05uY0ZWdmFHWldWVUV3T0hjdlZUZGxRV2RGTTNSeU4w
+
+        VkVOamsxT1hOeVFXUkxMekpvUlRoRFYzZFpTa3N2TkRabldrTktiVmg0VEhOVGQzTm1DbWQwYm1W
+
+        VGNtcEpRMG92UXpkQ1NGZDBhbGxPTWl0bWNtTTJNRGx2Y3padFpXcENPRnBzUmpWb1pqUnBlVnB6
+
+        WlhrNFNrSXZablJxT1dwTk9VZzNWbllLZDFkMk5qRnBNbk4yVEcxU2VubFJjVTFHVjB4V1JXWjVi
+
+        RkkzZGt0elUwcGllRkJsWWxKUllqaHViVEF3VFVGclNqa3JTbG81VmtSRVJHTTFjRE01THdwTlJt
+
+        VmlVRGxIZFdoTE1FcDNlVXhaUWsxVWRrRnNjVlo1WXpOSFZIaFdiakpEYlRsRWJTOTFNblYxS3l0
+
+        MFpWTm9XR3B0TVZoSGNWVldPRDBLTFMwdExTMUZUa1FnUTBWU1ZFbEdTVU5CVkVVdExTMHRMUW89
+
+        JyAnZWtzLWFzZ2ZsZWV0LTAxJwoKCiNkb3dubG9hZC1yZWxlYXNlCmVjaG8gIj09IG5vZGV1cCBu
+
+        b2RlIGNvbmZpZyBkb25lID09Igo=
+    Metadata:
+      aws:cdk:path: eks-worker-nodes/kops-node-0
+  eip0:
+    Type: AWS::EC2::EIP
+    Metadata:
+      aws:cdk:path: eks-worker-nodes/eip-0
+  eipassi0:
+    Type: AWS::EC2::EIPAssociation
+    Properties:
+      AllocationId:
+        Fn::GetAtt:
+          - eip0
+          - AllocationId
+      NetworkInterfaceId:
+        Ref: eni0
+    Metadata:
+      aws:cdk:path: eks-worker-nodes/eip-ass-i0
+  CDKMetadata:
+    Type: AWS::CDK::Metadata
+    Properties:
+      Modules: aws-cdk=1.19.0,@aws-cdk/aws-cloudwatch=1.6.1,@aws-cdk/aws-ec2=1.6.1,@aws-cdk/aws-iam=1.6.1,@aws-cdk/aws-ssm=1.6.1,@aws-cdk/core=1.6.1,@aws-cdk/cx-api=1.6.1,@aws-cdk/region-info=1.6.1,jsii-runtime=Python/3.7.4
+

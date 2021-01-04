@@ -1,0 +1,33 @@
+{
+  "@aws-cdk/core:enableStackNameDuplicates": "true",
+  "aws-cdk:enableDiffNoFail": "true",
+  "vpc-provider:account=596030579944:filter.vpc-id=vpc-03d1d3531a36fa1fc:region=us-east-1": {
+    "vpcId": "vpc-03d1d3531a36fa1fc",
+    "availabilityZones": [
+      "us-east-1a",
+      "us-east-1f"
+    ],
+    "privateSubnetIds": [
+      "subnet-0c011a7279146cffa",
+      "subnet-010893f1feef1c151"
+    ],
+    "privateSubnetNames": [
+      "Private"
+    ],
+    "privateSubnetRouteTableIds": [
+      "rtb-0a3f88b23ea33f752",
+      "rtb-01b34b3d2750c0f13"
+    ],
+    "publicSubnetIds": [
+      "subnet-040455b57b16a4cc9",
+      "subnet-0295ffde2e8ef11fe"
+    ],
+    "publicSubnetNames": [
+      "Public"
+    ],
+    "publicSubnetRouteTableIds": [
+      "rtb-0c1da83bef759c88d",
+      "rtb-0c1da83bef759c88d"
+    ]
+  }
+}
